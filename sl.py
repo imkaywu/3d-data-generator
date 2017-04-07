@@ -6,11 +6,12 @@ import mathutils
 bpy.data.scenes['Scene'].render.resolution_x = 1280 # 1920
 bpy.data.scenes['Scene'].render.resolution_y = 720 # 1080
 bpy.data.scenes['Scene'].render.resolution_percentage = 100
-bpy.data.scenes['Scene'].render.tile_x = 128
-bpy.data.scenes['Scene'].render.tile_y = 128
+bpy.data.scenes['Scene'].render.tile_x = 256
+bpy.data.scenes['Scene'].render.tile_y = 256
 bpy.data.scenes['Scene'].cycles.max_bounces = 4
 bpy.data.scenes['Scene'].cycles.min_bounces = 0
-bpy.data.scenes['Scene'].cycles.sample = 500
+bpy.data.scenes['Scene'].cycles.sample = 300
+bpy.context.scene.cycles.device = 'GPU'
 
 calib_scan = 0 # 0: calib, 1: scan
 angles = mathutils.Vector((-20.0, 0.0, 20.0)) * math.pi / 180.0

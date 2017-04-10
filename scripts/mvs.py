@@ -12,25 +12,35 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 bpy.context.scene.cycles.device = 'GPU'
 
+# root directory of synthetic dataset
+rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the calibration patterns
-idir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data/textures/texture00-10'
+idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data/test'
+odir = '%s/cube_mvs' % rdir
 
-for img_ind in range(10, 11):
-    texture = bpy.data.images.load('%s/%02d.jpg' % (idir, img_ind))
-    nodes = bpy.data.materials['diffuse'].node_tree.nodes
+
+
+for ind_img in range(1, 11):
+    texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_img))
+    nodes = bpy.data.materials['Material'].node_tree.nodes
     nodes.get("Image Texture").image = texture
+
+    subdir = 'tex_spc'
+    nodes["Group"].inputs[3].default_value = 0.0
+
+    for val_prop in range(0, 10):
+        nodes["Group"].inputs[4].default_value = val_prop / 100
     
-    subdir = '%02d' % img_ind
-    outdir = '%s/%s/visualize' % (odir, subdir)
-    if not os.path.exists(outdir):
-        os.makedirs(outdir)
-    
-    for cam_ind in range(0, 36):
-        bpy.context.scene.camera = bpy.data.objects['Camera.%03d' % cam_ind]
-        bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, cam_ind)
-        bpy.ops.render.render(write_still=True)
+        subsubdir = '%02d%02d' % (ind_img, val_prop)
+        outdir = '%s/%s/%s/visualize' % (odir, subdir, subsubdir)
+        if not os.path.exists(outdir):
+            os.makedirs(outdir)
+        
+        for ind_cam in range(0, 36):
+            bpy.context.scene.camera = bpy.data.objects['Camera.%03d' % ind_cam]
+            bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_cam)
+            bpy.ops.render.render(write_still=True)
 
 
 # scene = bpy.context.scene

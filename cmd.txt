@@ -1,1 +1,2 @@
-blender xxx.blend -b -P xxx.py
+cd "C:\Users\Daniela\Documents\3D_Recon\Data\synthetic_data\blender_proj_script"
+blender proj/mvs.blend -b -P scripts/mvs.py

@@ -30,7 +30,7 @@ for ind_img in range(1, 11):
     nodes["Group"].inputs[3].default_value = 0.0
 
     for val_prop in range(0, 10):
-        nodes["Group"].inputs[4].default_value = val_prop / 100
+        nodes["Group"].inputs[4].default_value = val_prop / 100.0
     
         subsubdir = '%02d%02d' % (ind_img, val_prop)
         outdir = '%s/%s/%s/visualize' % (odir, subdir, subsubdir)

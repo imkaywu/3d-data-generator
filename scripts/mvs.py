@@ -13,24 +13,25 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 bpy.context.scene.cycles.device = 'GPU'
 
 # root directory of synthetic dataset
-rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
+# rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
+rdir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data'
 # input directory of the calibration patterns
 idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = '%s/cube_mvs' % rdir
+odir = '%s/plane_sphere/tex_spec' % rdir
 
 
 
-for ind_img in range(1, 11):
+for ind_img in range(2, 11, 3):
     texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_img))
     nodes = bpy.data.materials['Material'].node_tree.nodes
     nodes.get("Image Texture").image = texture
 
-    subdir = 'tex_spc'
+    subdir = 'mvs'
     # nodes["Group"].inputs[3].default_value = 0.0
     nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
 
-    for val_prop in range(0, 10):
+    for val_prop in range(2, 11, 3):
         # nodes["Group"].inputs[4].default_value = val_prop / 100.0
         nodes.get("Principled BSDF").inputs[5].default_value = val_prop / 100.0 # Specular
     

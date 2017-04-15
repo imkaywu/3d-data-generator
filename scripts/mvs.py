@@ -20,19 +20,15 @@ idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
 odir = '%s/plane_sphere/tex_spec' % rdir
 
-
-
 for ind_img in range(2, 11, 3):
     texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_img))
     nodes = bpy.data.materials['Material'].node_tree.nodes
     nodes.get("Image Texture").image = texture
 
     subdir = 'mvs'
-    # nodes["Group"].inputs[3].default_value = 0.0
     nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
 
     for val_prop in range(2, 11, 3):
-        # nodes["Group"].inputs[4].default_value = val_prop / 100.0
         nodes.get("Principled BSDF").inputs[5].default_value = val_prop / 100.0 # Specular
     
         subsubdir = '%02d%02d' % (ind_img, val_prop)

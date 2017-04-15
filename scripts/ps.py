@@ -12,26 +12,37 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 bpy.context.scene.cycles.device = 'GPU'
 
+# root directory of synthetic dataset
+# rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
+rdir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data'
 # input directory of the calibration patterns
-idir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data/textures/texture00-10'
+idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data/test'
+odir = '%s/plane_sphere/tex_spec' % rdir
 
-for ind_tex in range(1, 11):
+# hide all the light sources
+for ind_light in range(0, 24):
+	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
+
+
+for ind_tex in range(2, 11, 3):
 	texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_tex))
-	nodes = bpy.data.materials['mixed.000'].node_tree.nodes
+	nodes = bpy.data.materials['Material'].node_tree.nodes
 	nodes.get("Image Texture").image = texture
-	
-	subdir = 'ps/%02d' % ind_tex
-	outdir = '%s/%s/visualize' % (odir, subdir)
-	if not os.path.exists(outdir):
-		os.makedirs(outdir)
-	
-	for ind_light in range(0, 24):
-		bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
-    
-	for ind_light in range(0, 24):
-		bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
-		bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
-		bpy.ops.render.render(write_still=True)
-		bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
+	nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
+
+	subdir = 'ps'
+	for val_prop in range(2, 11, 3):
+		nodes.get("Principled BSDF").inputs[5].default_value = val_prop / 100.0 # Specular
+
+		subsubdir = '%02d%02d' % (ind_tex, val_prop)
+		outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
+
+		if not os.path.exists(outdir):
+			os.makedirs(outdir)
+
+		for ind_light in range(0, 24):
+			bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
+			bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
+			bpy.ops.render.render(write_still=True)
+			bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True

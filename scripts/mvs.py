@@ -11,28 +11,31 @@ bpy.data.scenes['Scene'].cycles.max_bounces = 4
 bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
+# name of object
+obj_name = 'sphere'
 # number of images
-nimages = 49;
+nimages = len(bpy.data.objects) - 7;
 # root directory of synthetic dataset
-# rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
-rdir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data'
+rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the calibration patterns
 idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = '%s/sphere/tex_spec' % rdir
+odir = '%s/%s/mvs' % (rdir, obj_name)
 
-for ind_tex in range(8, 9, 3):
+subdir = 'tex_spec'
+for ind_tex in range(2, 9, 3):
     texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_tex))
     nodes = bpy.data.materials['Material'].node_tree.nodes
-    # nodes.get("Image Texture").image = texture
+    nodes.get("Image Texture").image = texture
 
-    subdir = 'mvs'
-    nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
-
-    for val_prop in range(5, 6, 3):
-        nodes.get("Principled BSDF").inputs[5].default_value = val_prop / 100.0 # Specular
-    
-        subsubdir = '%02d%02d' % (ind_tex, val_prop)
+    # nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
+    nodes["Group"].inputs[1].default_value = 0.0 # Roughness
+	
+    for ind_spec in range(2, 9, 3):
+        # nodes.get("Principled BSDF").inputs[5].default_value = ind_spec / 100.0 # Specular
+        nodes["Group"].inputs[2].default_value = ind_spec / 10.0 # Specular
+        
+        subsubdir = '%02d%02d' % (ind_tex, ind_spec)
         outdir = '%s/%s/%s/visualize' % (odir, subdir, subsubdir)
         if not os.path.exists(outdir):
             os.makedirs(outdir)

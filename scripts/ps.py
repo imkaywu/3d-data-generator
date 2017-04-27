@@ -10,39 +10,52 @@ bpy.data.scenes['Scene'].render.tile_y = 256
 bpy.data.scenes['Scene'].cycles.max_bounces = 4
 bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
-bpy.context.scene.cycles.device = 'GPU'
 
+# name of object
+obj_name = 'sphere'
 # root directory of synthetic dataset
-# rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
-rdir = 'C:/Users/Admin/Documents/3D Recon/Data/synthetic data'
+rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the calibration patterns
 idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = '%s/plane_sphere/tex_spec' % rdir
+odir = '%s/%s/ps' % (rdir, obj_name)
 
 # hide all the light sources
 for ind_light in range(0, 24):
 	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
 
+gen_data = 1
+if gen_data:
+	subdir = 'tex_spec'
+	for ind_tex in range(2, 9, 3):
+		texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_tex))
+		nodes = bpy.data.materials['Material'].node_tree.nodes
+		nodes.get("Image Texture").image = texture
+		# nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
+		nodes["Group"].inputs[1].default_value = 0.6 # Roughness
 
-for ind_tex in range(2, 11, 3):
-	texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_tex))
+		for ind_spec in range(2, 9, 3):
+			# nodes.get("Principled BSDF").inputs[5].default_value = ind_spec / 100.0 # Specular
+			nodes["Group"].inputs[2].default_value = ind_spec / 10.0 # Specular
+
+			subsubdir = '%02d%02d' % (ind_tex, ind_spec)
+			outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
+
+			if not os.path.exists(outdir):
+				os.makedirs(outdir)
+
+			for ind_light in range(0, 24):
+				bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
+				bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
+				bpy.ops.render.render(write_still=True)
+				bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
+else:
+	# get the mask
 	nodes = bpy.data.materials['Material'].node_tree.nodes
-	nodes.get("Image Texture").image = texture
-	nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
-
-	subdir = 'ps'
-	for val_prop in range(2, 11, 3):
-		nodes.get("Principled BSDF").inputs[5].default_value = val_prop / 100.0 # Specular
-
-		subsubdir = '%02d%02d' % (ind_tex, val_prop)
-		outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
-
-		if not os.path.exists(outdir):
-			os.makedirs(outdir)
-
-		for ind_light in range(0, 24):
-			bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
-			bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
-			bpy.ops.render.render(write_still=True)
-			bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
+	nodes.get("Image Texture").image = bpy.data.images.load('%s/textures/allone.bmp' % rdir)
+	nodes["Group"].inputs[1].default_value = 0.0
+	nodes["Group"].inputs[2].default_value = 0.0
+	for ind_light in range(0, 24):
+		bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
+	bpy.data.scenes['Scene'].render.filepath = '%s/%s/gt/mask.bmp' % (rdir, obj_name)
+	bpy.ops.render.render(write_still=True)

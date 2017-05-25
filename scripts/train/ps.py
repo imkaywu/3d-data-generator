@@ -1,5 +1,8 @@
 import bpy
 import os
+import sys
+sys.path.append('./scripts')
+from helper import set_prop_val
 
 # output properties
 bpy.data.scenes['Scene'].render.resolution_x = 1280 # 1920
@@ -15,10 +18,16 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 obj_name = 'sphere'
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
-# input directory of the calibration patterns
-idir = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
-odir = '%s/%s/ps' % (rdir, obj_name)
+odir = '%s/%s/train/ps' % (rdir, obj_name)
+# list of properties
+props = ['tex', 'alb', 'spec', 'rough', 'concav']
+# index of effective properties
+ind_props = [1, 2, 3]
+# get material nodes
+nodes = bpy.data.materials['Material'].node_tree.nodes
+# set the object visible
+bpy.data.objects['Sphere'].hide_render = False
 
 # hide all the light sources
 for ind_light in range(0, 24):
@@ -26,29 +35,27 @@ for ind_light in range(0, 24):
 
 gen_data = 1
 if gen_data:
-	subdir = 'tex_spec'
-	for ind_tex in range(2, 9, 3):
-		texture = bpy.data.images.load('%s/%02d.jpg' % (idir, ind_tex))
-		nodes = bpy.data.materials['Material'].node_tree.nodes
-		nodes.get("Image Texture").image = texture
-		# nodes.get("Principled BSDF").inputs[7].default_value = 0.0 # Roughness
-		nodes["Group"].inputs[1].default_value = 0.6 # Roughness
+	set_prop_val(nodes, 0, 0) # set texture to 0
+	for ind_1 in range(2, 9, 3):
+		set_prop_val(nodes, ind_props[0], ind_1)
 
-		for ind_spec in range(2, 9, 3):
-			# nodes.get("Principled BSDF").inputs[5].default_value = ind_spec / 100.0 # Specular
-			nodes["Group"].inputs[2].default_value = ind_spec / 10.0 # Specular
+		for ind_2 in range(2, 9, 3):
+			set_prop_val(nodes, ind_props[1], ind_2)
 
-			subsubdir = '%02d%02d' % (ind_tex, ind_spec)
-			outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
+			for ind_3 in range(2, 9, 3):
+				set_prop_val(nodes, ind_props[2], ind_3)
 
-			if not os.path.exists(outdir):
-				os.makedirs(outdir)
+				subdir = '00%02d%02d%02d' % (ind_1, ind_2, ind_3)
+				outdir = '%s/%s' % (odir, subdir)
 
-			for ind_light in range(0, 24):
-				bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
-				bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
-				bpy.ops.render.render(write_still=True)
-				bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
+				if not os.path.exists(outdir):
+					os.makedirs(outdir)
+
+				for ind_light in range(0, 24):
+					bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
+					bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
+					bpy.ops.render.render(write_still=True)
+					bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
 else:
 	# get the mask
 	nodes = bpy.data.materials['Material'].node_tree.nodes

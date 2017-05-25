@@ -2,6 +2,9 @@ import bpy
 import os
 import math
 import mathutils
+import sys
+sys.path.append('./scripts')
+from helper import set_prop_val
 
 # output properties
 bpy.data.scenes['Scene'].render.resolution_x = 1280 # 1920
@@ -24,52 +27,58 @@ obj_name = 'sphere'
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the projection patterns
 idir = '%s/textures/sl' % rdir
-#input directory of the textures
-idir_tex = '%s/textures/texture01_10' % rdir
 # output directory of rendered images
 odir = '%s/%s/sl' % (rdir, obj_name)
+# list of properties
+props = ['tex', 'alb', 'spec', 'rough', 'concav']
+# obtain the nodes
+nodes = bpy.data.materials['Material'].node_tree.nodes
+# set the object visible
+bpy.data.objects['Sphere'].hide_render = False
 
 if (calib_scan):
     bpy.data.objects['Point'].hide_render = True
     bpy.data.objects['Lamp'].hide_render = False
-    bpy.data.objects['Plane_Calib'].hide_render = True
     bpy.data.objects['Plane'].hide_render = True
 
     proj_nodes = bpy.data.lamps['Lamp'].node_tree.nodes
     tex_node = proj_nodes.get('Image Texture')
+    for i in range(0, 4):
+        for j in range(i + 1, 4):
+            subdir = '%s_%s' % (props[i], props[j])
+            set_prop_val(nodes, 0, 0) # Texture
+            set_prop_val(nodes, 1, 10) # Albedo
+            set_prop_val(nodes, 2, 0) # Specular
+            set_prop_val(nodes, 3, 0) # Roughness
 
-    subdir = 'tex_spec'
-    for ind_tex in range(2, 9, 3):
-        texture = bpy.data.images.load('%s/%02d.jpg' % (idir_tex, ind_tex))
-        nodes = bpy.data.materials['Material'].node_tree.nodes
-        nodes.get("Image Texture").image = texture
-        nodes["Group"].inputs[1].default_value = 0.0 # Roughness
+            for ind_1 in range(2, 9, 3):
+                set_prop_val(nodes, i, ind_1)
 
-        for ind_spec in range(2, 9, 3):
-            nodes["Group"].inputs[2].default_value = ind_spec / 10.0 # Specular
+                for ind_2 in range(2, 9, 3):
+                    set_prop_val(nodes, j, ind_2)
 
-            subsubdir = '%02d%02d' % (ind_tex, ind_spec)
-            outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
+                    subsubdir = '%02d%02d' % (ind_1, ind_2)
+                    outdir = '%s/%s/%s' % (odir, subdir, subsubdir)
 
-            if not os.path.exists(outdir):
-                os.makedirs(outdir)
+                    if not os.path.exists(outdir):
+                        os.makedirs(outdir)
 
-            for ind_img in range(0, nimg):
-                proj_ptn = bpy.data.images.load("%s/sl_v%d.jpg" % (idir, ind_img))
-                tex_node.image = proj_ptn
-                bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img)
-                bpy.ops.render.render(write_still=True)
-                
-                proj_ptn = bpy.data.images.load("%s/sl_h%d.jpg" % (idir, ind_img))
-                tex_node.image = proj_ptn
-                bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img + nimg)
-                bpy.ops.render.render(write_still=True)
-            
-            for ind_img in range(0, 2):
-                proj_ptn = bpy.data.images.load("%s/sl_a%d.jpg" % (idir, 1 - ind_img))
-                tex_node.image = proj_ptn
-                bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img + 2 * nimg)
-                bpy.ops.render.render(write_still=True)
+                    for ind_img in range(0, nimg):
+                        proj_ptn = bpy.data.images.load("%s/sl_v%d.jpg" % (idir, ind_img))
+                        tex_node.image = proj_ptn
+                        bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img)
+                        bpy.ops.render.render(write_still=True)
+                        
+                        proj_ptn = bpy.data.images.load("%s/sl_h%d.jpg" % (idir, ind_img))
+                        tex_node.image = proj_ptn
+                        bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img + nimg)
+                        bpy.ops.render.render(write_still=True)
+                    
+                    for ind_img in range(0, 2):
+                        proj_ptn = bpy.data.images.load("%s/sl_a%d.jpg" % (idir, 1 - ind_img))
+                        tex_node.image = proj_ptn
+                        bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img + 2 * nimg)
+                        bpy.ops.render.render(write_still=True)
 else:
     ## for future reference: I made some changes to the the output directory, but this part of code is left unchanged,
     ## it's might be necessary to change some lines of codes of the calibration part
@@ -145,3 +154,4 @@ else:
             plane_calib.rotation_euler[1] = angles[j]
             bpy.data.scenes['Scene'].render.filepath = '%s/proj_%04d.jpg' % (odir, (i * ndim) + j + ndim * ndim)
             bpy.ops.render.render(write_still=True)
+

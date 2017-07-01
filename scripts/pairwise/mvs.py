@@ -17,32 +17,32 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 # name of object
 obj_name = 'sphere'
 # number of images
-nimages = len(bpy.data.objects) - 10;
+nimages = len(bpy.data.objects) - 3;
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images
 odir = '%s/%s/mvs' % (rdir, obj_name)
 # list of properties
-props = ['tex', 'alb', 'spec', 'rough', 'concav']
+props = ['tex', 'alb', 'spec', 'rough']
 # obtain the nodes
 nodes = bpy.data.materials['Material'].node_tree.nodes
 # set the object visible
 bpy.data.objects['Sphere'].hide_render = False
 
-for i in range(1, 4):
-	for j in range(i + 1, 4):
+for i in range(0, len(props)):
+	for j in range(i + 1, len(props)):
 		subdir = '%s_%s' % (props[i], props[j])
-		set_prop_val(nodes, 0, 10) # Texture
-		set_prop_val(nodes, 1, 10) # Albedo
+		set_prop_val(nodes, 0, 8) # Texture
+		set_prop_val(nodes, 1, 8) # Albedo
 		set_prop_val(nodes, 2, 0) # Specular
 		set_prop_val(nodes, 3, 0) # Roughness
 
 		for ind_1 in range(2, 9, 3):
 			set_prop_val(nodes, i, ind_1)
-			
+
 			for ind_2 in range(2, 9, 3):
 				set_prop_val(nodes, j, ind_2)
-		        
+
 				subsubdir = '%02d%02d' % (ind_1, ind_2)
 				outdir = '%s/%s/%s/visualize' % (odir, subdir, subsubdir)
 				if not os.path.exists(outdir):

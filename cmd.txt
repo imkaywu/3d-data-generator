@@ -1,3 +1,2 @@
-cd "C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data/blender_proj_script"
 cd "C:/Users/Admin/Documents/3D Recon/Data/synthetic data/blender_proj_script"
-blender proj/mvs.blend -b -P scripts/mvs.py
+blender proj/mvs.blend -b -P scripts/[type]/mvs.py

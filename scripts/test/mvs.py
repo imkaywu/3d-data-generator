@@ -27,6 +27,7 @@ ind_prop = numpy.matrix([[2, 8, 2, 8], [2, 8, 5, 2], [8, 8, 2, 8], [8, 8, 5, 2]]
 # hide all objects
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
+bpy.data.objects['Sphere'].hide_render = True
 
 # get material nodes
 nodes = bpy.data.materials['Material'].node_tree.nodes

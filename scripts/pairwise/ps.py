@@ -39,7 +39,7 @@ for i in range(0, len(props)):
 		set_prop_val(nodes, 0, 0) # Texture
 		set_prop_val(nodes, 1, 8) # Albedo
 		set_prop_val(nodes, 2, 0) # Specular
-		set_prop_val(nodes, 3, 0) # Roughness
+		set_prop_val(nodes, 3, 2) # Roughness
 
 		for ind_1 in range(2, 9, 3):
 			set_prop_val(nodes, i, ind_1)

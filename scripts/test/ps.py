@@ -17,19 +17,21 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
 obj_name = ['king', 'knight']
+# number of images
+nimages = 25
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # list of properties
 ind_prop = numpy.matrix([[2, 8, 2, 8], [2, 8, 5, 2], [8, 8, 2, 8], [8, 8, 5, 2]])
 
 # hide all the light sources
-for ind_light in range(0, 24):
+for ind_light in range(0, nimages):
 	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
 
 # hide all objects except the projector
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
-# bpy.data.objects['Cylinder'].hide_render = True
+bpy.data.objects['Sphere'].hide_render = True
 
 # set the other properties to default values
 nodes = bpy.data.materials['Material'].node_tree.nodes
@@ -58,7 +60,7 @@ for ind_obj in range(1, len(obj_name)):
         if not os.path.exists(outdir):
         	os.makedirs(outdir)
 
-        for ind_light in range(0, 24):
+        for ind_light in range(0, nimages):
             bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
             bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
             bpy.ops.render.render(write_still=True)

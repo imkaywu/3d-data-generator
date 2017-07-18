@@ -33,7 +33,7 @@ ind_prop = numpy.matrix([[2, 8, 2, 8], [2, 8, 5, 2], [8, 8, 2, 8], [8, 8, 5, 2]]
 # hide all objects except the projector
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
-# bpy.data.objects['Cylinder'].hide_render = True
+bpy.data.objects['Sphere'].hide_render = True
 bpy.data.objects['Lamp'].hide_render = False
 bpy.data.objects['Point'].hide_render = True
 bpy.data.objects['Plane'].hide_render = True

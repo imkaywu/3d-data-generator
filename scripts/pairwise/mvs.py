@@ -17,7 +17,7 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 # name of object
 obj_name = 'sphere'
 # number of images
-nimages = len(bpy.data.objects) - 3;
+nimages = 41 #len(bpy.data.objects) - 3
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images
@@ -29,15 +29,15 @@ nodes = bpy.data.materials['Material'].node_tree.nodes
 # set the object visible
 bpy.data.objects['Sphere'].hide_render = False
 
-for i in range(0, len(props)):
-	for j in range(i + 1, len(props)):
+for i in range(0, 1):
+	for j in range(i + 1, 2):
 		subdir = '%s_%s' % (props[i], props[j])
 		set_prop_val(nodes, 0, 8) # Texture
 		set_prop_val(nodes, 1, 8) # Albedo
 		set_prop_val(nodes, 2, 0) # Specular
 		set_prop_val(nodes, 3, 0) # Roughness
 
-		for ind_1 in range(2, 9, 3):
+		for ind_1 in range(2, 3, 3):
 			set_prop_val(nodes, i, ind_1)
 
 			for ind_2 in range(2, 9, 3):

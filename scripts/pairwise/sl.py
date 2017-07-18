@@ -43,11 +43,13 @@ proj_nodes = bpy.data.lamps['Lamp'].node_tree.nodes
 tex_node = proj_nodes.get('Image Texture')
 for i in range(0, len(props)):
 	for j in range(i + 1, len(props)):
+		if i == 0 and j == 1:
+			continue
 		subdir = '%s_%s' % (props[i], props[j])
 		set_prop_val(nodes, 0, 0) # Texture
 		set_prop_val(nodes, 1, 8) # Albedo
 		set_prop_val(nodes, 2, 0) # Specular
-		set_prop_val(nodes, 3, 0) # Roughness
+		set_prop_val(nodes, 3, 1) # Roughness
 
 		for ind_1 in range(2, 9, 3):
 			set_prop_val(nodes, i, ind_1)

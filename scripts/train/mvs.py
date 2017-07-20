@@ -17,7 +17,7 @@ bpy.data.scenes['Scene'].cycles.sample = 300
 # name of object
 obj_name = 'sphere'
 # number of images
-nimages = len(bpy.data.objects) - 3;
+nimages = 41 # len(bpy.data.objects) - 3
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images

@@ -28,7 +28,7 @@ rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the projection patterns
 idir = '%s/textures/sl' % rdir
 # output directory of rendered images
-odir = '%s/%s/sl' % (rdir, obj_name)
+odir = '%s/%s/pairwise/sl' % (rdir, obj_name)
 # list of properties
 props = ['tex', 'alb', 'spec', 'rough']
 # obtain the nodes

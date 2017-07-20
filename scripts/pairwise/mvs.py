@@ -21,7 +21,7 @@ nimages = 41 #len(bpy.data.objects) - 3
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images
-odir = '%s/%s/mvs' % (rdir, obj_name)
+odir = '%s/%s/pairwise/mvs' % (rdir, obj_name)
 # list of properties
 props = ['tex', 'alb', 'spec', 'rough']
 # obtain the nodes

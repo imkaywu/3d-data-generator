@@ -21,7 +21,7 @@ nimages = 25
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images
-odir = '%s/%s/ps' % (rdir, obj_name)
+odir = '%s/%s/pairwise/ps' % (rdir, obj_name)
 # list of properties
 props = ['tex', 'alb', 'spec', 'rough']
 # obtain the nodes

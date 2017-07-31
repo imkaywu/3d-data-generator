@@ -22,7 +22,7 @@ ndim = 3 # number of angles, 3
 nimg = 20 # number of patterns, 20
 
 # name of object
-obj_name = ['king', 'knight']
+obj_name = ['cup', 'king', 'knight']
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the projection patterns
@@ -31,9 +31,10 @@ idir = '%s/textures/sl' % rdir
 ind_prop = numpy.matrix([[2, 8, 2, 8], [2, 8, 5, 2], [8, 8, 2, 8], [8, 8, 5, 2]])
 
 # hide all objects except the projector
+bpy.data.objects['Sphere'].hide_render = True
+bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
-bpy.data.objects['Sphere'].hide_render = True
 bpy.data.objects['Lamp'].hide_render = False
 bpy.data.objects['Point'].hide_render = True
 bpy.data.objects['Plane'].hide_render = True
@@ -43,15 +44,10 @@ nodes = bpy.data.materials['Material'].node_tree.nodes
 proj_nodes = bpy.data.lamps['Lamp'].node_tree.nodes
 tex_node = proj_nodes.get('Image Texture')
 
-for ind_obj in range(1, len(obj_name)):
+for ind_obj in range(0, len(obj_name) - 1):
     # output directory of rendered images
     odir = '%s/testing/%s' % (rdir, obj_name[ind_obj])
-    if ind_obj == 0:
-        bpy.data.objects['king'].hide_render = False
-    elif ind_obj == 1:
-        bpy.data.objects['knight'].hide_render = False
-    else:
-        bpy.data.objects['Circle.002'].hide_render = False
+    bpy.data.objects[obj_name[ind_obj]].hide_render = False
     
     for row in range(0, len(ind_prop)):
         subdir = '%02d%02d%02d%02d' % (ind_prop[row, 0], ind_prop[row, 1], ind_prop[row, 2], ind_prop[row, 3])
@@ -84,9 +80,4 @@ for ind_obj in range(1, len(obj_name)):
             bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_img + 2 * nimg)
             bpy.ops.render.render(write_still=True)
     
-    if ind_obj == 0:
-        bpy.data.objects['king'].hide_render = True
-    elif ind_obj ==  1:
-        bpy.data.objects['knight'].hide_render = True
-    else:
-        bpy.data.objects['Circle.002'].hide_render = True
+    bpy.data.objects[obj_name[ind_obj]].hide_render = True

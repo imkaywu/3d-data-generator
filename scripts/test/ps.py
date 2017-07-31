@@ -16,7 +16,7 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
-obj_name = ['king', 'knight']
+obj_name = ['cup', 'king', 'knight']
 # number of images
 nimages = 25
 # root directory of synthetic dataset
@@ -29,26 +29,22 @@ for ind_light in range(0, nimages):
 	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
 
 # hide all objects except the projector
+bpy.data.objects['Sphere'].hide_render = True
+bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
-bpy.data.objects['Sphere'].hide_render = True
 
 # set the other properties to default values
 nodes = bpy.data.materials['Material'].node_tree.nodes
 
-for ind_obj in range(1, len(obj_name)):
+for ind_obj in range(0, len(obj_name) - 1):
     # output directory of rendered images
     odir = '%s/testing/%s' % (rdir, obj_name[ind_obj])
-    if ind_obj == 0:
-        bpy.data.objects['king'].hide_render = False
-    elif ind_obj == 1:
-        bpy.data.objects['knight'].hide_render = False
-    else:
-        bpy.data.objects['Circle.002'].hide_render = False
+    bpy.data.objects[obj_name[ind_obj]].hide_render = False
 
     for row in range(0, len(ind_prop)):
         subdir = '%02d%02d%02d%02d' % (ind_prop[row, 0], ind_prop[row, 1], ind_prop[row, 2], ind_prop[row, 3])
-    
+        
         # set the other properties to default values
         nodes["Group"].inputs[1].default_value = ind_prop[row, 0] / 10.0 # Texture
         nodes["Group"].inputs[2].default_value = ind_prop[row, 1] / 10.0 # Albedo
@@ -66,9 +62,4 @@ for ind_obj in range(1, len(obj_name)):
             bpy.ops.render.render(write_still=True)
             bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
     
-    if ind_obj == 0:
-        bpy.data.objects['king'].hide_render = True
-    elif ind_obj ==  1:
-        bpy.data.objects['knight'].hide_render = True
-    else:
-        bpy.data.objects['Circle.002'].hide_render = True
+    bpy.data.objects[obj_name[ind_obj]].hide_render = True

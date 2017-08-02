@@ -11,14 +11,15 @@ bpy.data.scenes['Scene'].cycles.max_bounces = 4
 bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 500
 
+# number of light sources
+nimg = 25
 # root directory of synthetic dataset
-# rdir = 'C:/Users/Daniela/Documents/3D_Recon/Data/synthetic_data'
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # output directory of rendered images
 odir = '%s/ref_obj' % rdir
 
 # hide all the light sources
-for ind_light in range(0, 24):
+for ind_light in range(0, nimg):
 	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
 
 # hide the target object
@@ -34,7 +35,7 @@ for ind_ref in range(0, 2):
     if not os.path.exists(outdir):
     	os.makedirs(outdir)
 
-    for ind_light in range(0, 24):
+    for ind_light in range(0, nimg):
     	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
     	bpy.data.scenes['Scene'].render.filepath = '%s/%04d.jpg' % (outdir, ind_light)
     	bpy.ops.render.render(write_still=True)
@@ -43,11 +44,11 @@ for ind_ref in range(0, 2):
     bpy.data.objects['Sphere.%03d' % ind_ref].hide_render = True
 
 # set all light sources visible
-for ind_light in range(0, 24):
-    bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
+# for ind_light in range(0, nimg):
+#     bpy.data.objects['Lamp.%03d' % ind_light].hide_render = False
 
-for ind_ref in range(0, 2):
-    bpy.data.objects['Sphere.%03d' % ind_ref].hide_render = False
-    bpy.data.scenes['Scene'].render.filepath = '%s/mask/%04d.jpg' % (odir, ind_ref)
-    bpy.ops.render.render(write_still=True)
-    bpy.data.objects['Sphere.%03d' % ind_ref].hide_render = True
+# for ind_ref in range(0, 2):
+#     bpy.data.objects['Sphere.%03d' % ind_ref].hide_render = False
+#     bpy.data.scenes['Scene'].render.filepath = '%s/mask/%04d.jpg' % (odir, ind_ref)
+#     bpy.ops.render.render(write_still=True)
+#     bpy.data.objects['Sphere.%03d' % ind_ref].hide_render = True

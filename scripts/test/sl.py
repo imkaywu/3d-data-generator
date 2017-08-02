@@ -4,7 +4,7 @@ import math
 import mathutils
 import numpy
 import sys
-sys.path.append('./scripts')
+sys.path.append('./scripts/util')
 from helper import set_prop_val
 
 # output properties
@@ -22,7 +22,7 @@ ndim = 3 # number of angles, 3
 nimg = 20 # number of patterns, 20
 
 # name of object
-obj_name = ['cup', 'king', 'knight']
+obj_name = ['ball', 'cup', 'king', 'knight']
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # input directory of the projection patterns
@@ -32,6 +32,7 @@ ind_prop = numpy.matrix([[2, 8, 2, 8], [2, 8, 5, 2], [8, 8, 2, 8], [8, 8, 5, 2]]
 
 # hide all objects except the projector
 bpy.data.objects['Sphere'].hide_render = True
+bpy.data.objects['ball'].hide_render = True
 bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
@@ -44,7 +45,7 @@ nodes = bpy.data.materials['Material'].node_tree.nodes
 proj_nodes = bpy.data.lamps['Lamp'].node_tree.nodes
 tex_node = proj_nodes.get('Image Texture')
 
-for ind_obj in range(0, len(obj_name) - 1):
+for ind_obj in range(0, 1):
     # output directory of rendered images
     odir = '%s/testing/%s' % (rdir, obj_name[ind_obj])
     bpy.data.objects[obj_name[ind_obj]].hide_render = False

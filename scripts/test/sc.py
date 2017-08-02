@@ -15,15 +15,16 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
-obj_name = ['cup', 'king', 'knight']
+obj_name = ['ball', 'cup', 'king', 'knight']
 # number of images
 nimages = 41;
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data/testing'
 # get material nodes
 nodes = bpy.data.materials['Material'].node_tree.nodes
-# set the object visible
+# set the object invisible
 bpy.data.objects['Sphere'].hide_render = True
+bpy.data.objects['ball'].hide_render = True
 bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
@@ -39,7 +40,7 @@ links_world = bpy.data.worlds['World'].node_tree.links
 links_world.remove(links_world[1])
 links_world.new(nodes_world.get("Light Path").outputs[0], nodes_world.get("Background").inputs[1])
 
-for iobj in range(0, len(obj_name) - 1):
+for iobj in range(0, 1):
 	set_prop_val(nodes, 0, 10) # texture
 	set_prop_val(nodes, 1, 10) # albedo
 	set_prop_val(nodes, 2, 0); # specular
@@ -48,7 +49,7 @@ for iobj in range(0, len(obj_name) - 1):
 	# set obj visible
 	bpy.data.objects[obj_name[iobj]].hide_render = False
 	# output directory of rendered images
-	odir = '%s/%s/test/sc' % (rdir, obj_name[iobj])
+	odir = '%s/%s/sc' % (rdir, obj_name[iobj])
 
 	if not os.path.exists(odir):
 	    os.makedirs(odir)

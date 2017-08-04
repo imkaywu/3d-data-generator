@@ -13,13 +13,15 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
-obj_name = ['ball', 'cup', 'king', 'knight', 'Sphere']
+obj_name = ['bottle', 'cup', 'king', 'knight', 'Sphere']
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
 # get material nodes
 nodes = bpy.data.materials['Material'].node_tree.nodes
 # set the object invisible
 bpy.data.objects['Sphere'].hide_render = True
+bpy.data.objects['ball'].hide_render = True
+bpy.data.objects['bottle'].hide_render = True
 bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True

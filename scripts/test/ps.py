@@ -16,7 +16,7 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
-obj_name = ['ball', 'cup', 'king', 'knight']
+obj_name = ['bottle', 'cup', 'king', 'knight']
 # number of images
 nimages = 25
 # root directory of synthetic dataset
@@ -31,6 +31,7 @@ for ind_light in range(0, nimages):
 # hide all objects except the projector
 bpy.data.objects['Sphere'].hide_render = True
 bpy.data.objects['ball'].hide_render = True
+bpy.data.objects['bottle'].hide_render = True
 bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
@@ -38,7 +39,7 @@ bpy.data.objects['knight'].hide_render = True
 # set the other properties to default values
 nodes = bpy.data.materials['Material'].node_tree.nodes
 
-for ind_obj in range(0, 1):
+for ind_obj in range(0, len(obj_name)):
     # output directory of rendered images
     odir = '%s/testing/%s' % (rdir, obj_name[ind_obj])
     bpy.data.objects[obj_name[ind_obj]].hide_render = False

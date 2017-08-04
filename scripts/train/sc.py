@@ -26,10 +26,8 @@ odir = '%s/%s/train/sc' % (rdir, obj_name)
 nodes = bpy.data.materials['Material'].node_tree.nodes
 # set the object visible
 bpy.data.objects['Sphere'].hide_render = False
-bpy.data.objects['Point'].hide_render = False
-bpy.data.objects['Point.001'].hide_render = False
-bpy.data.objects['Point.002'].hide_render = False
-bpy.data.objects['Point.003'].hide_render = False
+for ilight in range(0, 8)
+	bpy.data.objects['Point.%03d' % ilight].hide_render = False
 
 set_prop_val(nodes, 0, 10) # texture
 set_prop_val(nodes, 1, 10) # albedo

@@ -3,7 +3,7 @@ import os
 import math
 import mathutils
 import sys
-sys.path.append('./scripts')
+sys.path.append('./scripts/util')
 from helper import set_prop_val
 
 # output properties
@@ -44,13 +44,13 @@ proj_nodes = bpy.data.lamps['Lamp'].node_tree.nodes
 tex_node = proj_nodes.get('Image Texture')
 
 set_prop_val(nodes, 0, 2) # set texture to 0.2
-for ind_1 in range(2, 9, 3):
+for ind_1 in range(2, 3, 3):
     set_prop_val(nodes, ind_props[0], ind_1)
 
     for ind_2 in range(2, 9, 3):
         set_prop_val(nodes, ind_props[1], ind_2)
 
-        for ind_3 in range(2, 9, 3):
+        for ind_3 in range(8, 9, 3):
             set_prop_val(nodes, ind_props[2], ind_3)
 
             subdir = '00%02d%02d%02d' % (ind_1, ind_2, ind_3) # change if ind_props changes

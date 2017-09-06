@@ -13,18 +13,23 @@ bpy.data.scenes['Scene'].cycles.min_bounces = 0
 bpy.data.scenes['Scene'].cycles.sample = 300
 
 # name of object
-obj_name = ['bottle', 'cup', 'king', 'knight', 'Sphere']
+obj_name = ['barrel', 'vase2', 'Sphere']
 # root directory of synthetic dataset
 rdir = 'C:/Users/Admin/Documents/3D_Recon/Data/synthetic_data'
-# get material nodes
-nodes = bpy.data.materials['Material'].node_tree.nodes
 # set the object invisible
 bpy.data.objects['Sphere'].hide_render = True
-bpy.data.objects['ball'].hide_render = True
 bpy.data.objects['bottle'].hide_render = True
-bpy.data.objects['cup'].hide_render = True
 bpy.data.objects['king'].hide_render = True
 bpy.data.objects['knight'].hide_render = True
+for iobj in range(0, len(obj_name)):
+	if iobj == 0:
+		bpy.data.objects['BarrelBulge'].hide_render = True
+		bpy.data.objects['BarrelCircle'].hide_render = True
+		bpy.data.objects['MetalRing'].hide_render = True
+		bpy.data.objects['Planks'].hide_render = True
+		bpy.data.objects['TopPlanks'].hide_render = True
+	else:
+		bpy.data.objects[obj_name[iobj]].hide_render = True
 # hide all the light sources
 for ind_light in range(0, 24):
 	bpy.data.objects['Lamp.%03d' % ind_light].hide_render = True
@@ -41,13 +46,18 @@ bpy.data.objects['Lamp.005'].hide_render = False
 bpy.data.objects['Lamp.007'].hide_render = False
 bpy.data.objects['Lamp.009'].hide_render = False
 
-for iobj in range(0, len(obj_name) - 1):
-	bpy.data.objects[obj_name[iobj]].hide_render = False
+for iobj in range(1, len(obj_name) - 1):
+	if iobj == 0:
+		bpy.data.objects['Planks'].hide_render = False
+		bpy.data.objects['TopPlanks'].hide_render = False
+	else:
+		bpy.data.objects[obj_name[iobj]].hide_render = False
+
 	# output directory of rendered images
 	if iobj == len(obj_name) - 1:
 		odir = '%s/%s' % (rdir, obj_name[iobj])
 	else:
-		odir = '%s/testing/%s' % (rdir, obj_name[iobj])
+		odir = '%s/synth/%s' % (rdir, obj_name[iobj])
 
 	outdir = '%s/gt' % odir
 	if not os.path.exists(outdir):
@@ -56,7 +66,11 @@ for iobj in range(0, len(obj_name) - 1):
 	bpy.data.scenes['Scene'].render.filepath = '%s/mask_rgb.jpg' % outdir
 	bpy.ops.render.render(write_still=True)
 
-	bpy.data.objects[obj_name[iobj]].hide_render = True
+	if iobj == 0:
+		bpy.data.objects['Planks'].hide_render = True
+		bpy.data.objects['TopPlanks'].hide_render = True
+	else:
+		bpy.data.objects[obj_name[iobj]].hide_render = True
 
 bpy.data.objects['Lamp.000'].hide_render = True
 bpy.data.objects['Lamp.001'].hide_render = True

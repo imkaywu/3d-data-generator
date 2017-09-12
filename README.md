@@ -1,13 +1,13 @@
 ## Setup
 
 ### MVS
-![mvs setup](img/mvs_setup.png)
+![mvs setup](img/mvs_setup.jpg)
 
 ### PS
-![ps setup](img/ps_setup.png)
+![ps setup](img/ps_setup.jpg)
 
 ### SL
-![sl setup](img/sl_setup.png)
+![sl setup](img/sl_setup.jpg)
 
 ## Syntheic image generation
 
